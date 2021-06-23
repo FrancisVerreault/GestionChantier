@@ -4,69 +4,106 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
 <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 
-<div class="container">
+<div type="hidden" class="photographerIdentifier" id="AST"></div>
+<div class="container-fluid">
     <div id="myModal" class="modal" tabindex="-1" role="dialog" data-backdrop="false">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><b>Vérifier que votre AST est lisible</b></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div id="modal-body" class="modal-body">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><b>Vérifier que votre AST est lisible</b></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="modal-body" class="modal-body">
 
-                </div>
-                <div id="modal-footer" class="modal-footer">
-                    <select class="form-control" id="SelectProjet"></select>
+                    </div>
+                    <div id="modal-footer" class="modal-footer">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-8">
+                                    <select class="form-control" id="SelectProjet"></select>
+                                </div>
+                                <div class="col-1">
+                                    <span style="z-index:1;" class='badge badge-danger smallBadge' id='lblASTCount'>0</span>
+                                </div>
+                                <div class="col-2">
+                                    <svg version="1.1" id="ASTCompleted" class="d-none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30px" height="30px" viewBox="0 0 122.88 122.88" enable-background="new 0 0 122.88 122.88" xml:space="preserve"><g><path fill="#6BBE66" d="M34.388,67.984c-0.286-0.308-0.542-0.638-0.762-0.981c-0.221-0.345-0.414-0.714-0.573-1.097 c-0.531-1.265-0.675-2.631-0.451-3.934c0.224-1.294,0.812-2.531,1.744-3.548l0.34-0.35c2.293-2.185,5.771-2.592,8.499-0.951 c0.39,0.233,0.762,0.51,1.109,0.827l0.034,0.031c1.931,1.852,5.198,4.881,7.343,6.79l1.841,1.651l22.532-23.635 c0.317-0.327,0.666-0.62,1.035-0.876c0.378-0.261,0.775-0.482,1.185-0.661c0.414-0.181,0.852-0.323,1.3-0.421 c0.447-0.099,0.903-0.155,1.356-0.165h0.026c0.451-0.005,0.893,0.027,1.341,0.103c0.437,0.074,0.876,0.193,1.333,0.369 c0.421,0.161,0.825,0.363,1.207,0.604c0.365,0.231,0.721,0.506,1.056,0.822l0.162,0.147c0.316,0.313,0.601,0.653,0.85,1.014 c0.256,0.369,0.475,0.766,0.652,1.178c0.183,0.414,0.325,0.852,0.424,1.299c0.1,0.439,0.154,0.895,0.165,1.36v0.23 c-0.004,0.399-0.042,0.804-0.114,1.204c-0.079,0.435-0.198,0.863-0.356,1.271c-0.16,0.418-0.365,0.825-0.607,1.21 c-0.238,0.377-0.518,0.739-0.832,1.07l-27.219,28.56c-0.32,0.342-0.663,0.642-1.022,0.898c-0.369,0.264-0.767,0.491-1.183,0.681 c-0.417,0.188-0.851,0.337-1.288,0.44c-0.435,0.104-0.889,0.166-1.35,0.187l-0.125,0.003c-0.423,0.009-0.84-0.016-1.241-0.078 l-0.102-0.02c-0.415-0.07-0.819-0.174-1.205-0.31c-0.421-0.15-0.833-0.343-1.226-0.575l-0.063-0.04 c-0.371-0.224-0.717-0.477-1.032-0.754l-0.063-0.06c-1.58-1.466-3.297-2.958-5.033-4.466c-3.007-2.613-7.178-6.382-9.678-9.02 L34.388,67.984L34.388,67.984z M61.44,0c16.96,0,32.328,6.883,43.453,17.987c11.104,11.125,17.986,26.493,17.986,43.453 c0,16.961-6.883,32.329-17.986,43.454C93.769,115.998,78.4,122.88,61.44,122.88c-16.961,0-32.329-6.882-43.454-17.986 C6.882,93.769,0,78.4,0,61.439C0,44.48,6.882,29.112,17.986,17.987C29.112,6.883,44.479,0,61.44,0L61.44,0z M96.899,25.981 C87.826,16.907,75.29,11.296,61.44,11.296c-13.851,0-26.387,5.611-35.46,14.685c-9.073,9.073-14.684,21.609-14.684,35.458 c0,13.851,5.611,26.387,14.684,35.46s21.609,14.685,35.46,14.685c13.85,0,26.386-5.611,35.459-14.685s14.684-21.609,14.684-35.46 C111.583,47.59,105.973,35.054,96.899,25.981L96.899,25.981z"></path></g></svg>
+                                </div>
+                            </div>
+                            <div class="row" id="modal-footer-btn">
+                            </div>
+                        </div>
+                    </div>
+                    @{ if (ViewBag.ASTAdmin)
+                        { Html.RenderPartial("_ASTAdmin"); }
+                    }
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="row h-50">
-        <h1 class="title">
-            <a class="btn btn-primary" href="/Home/Index" role="button">Menu</a>
-
-            Prenez votre AST en photo
-        </h1>
-        <video autoplay id="video"></video>
-        <!----><button class="button is-hidden" id="btnPlay">
-            <span class="icon is-small">
-                <i class="fas fa-play"></i>
-            </span>
-        </button>
-        <button class="button is-hidden" id="btnPause">
-            <span class="icon is-small">
-                <i class="fas fa-pause"></i>
-            </span>
-        </button>
-        <button class="button is-success" id="btnScreenshot">
-            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<span class="icon is-small">
-                <i class="fas fa-camera"></i>
-            </span>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-        </button>
-        <button class="button" id="btnChangeCamera">
-            <span class="icon">
-                <i class="fas fa-sync-alt"></i>
-            </span>
-            <span>Switch camera</span>
-        </button>
+    <div class="row" style="display:inline;">
+        <div class="col-12">
+            <h1>
+                <a class="btn btn-primary" href="/Home/Index" role="button">Menu</a>
+                <b>Photographier votre AST</b>
+            </h1>
+            <video autoplay id="video" autoplay></video>
+            <!----><button class="button is-hidden" id="btnPlay">
+                <span class="icon is-small">
+                    <i class="fas fa-play"></i>
+                </span>
+            </button>
+            <button class="button is-hidden" id="btnPause">
+                <span class="icon is-small">
+                    <i class="fas fa-pause"></i>
+                </span>
+            </button>
+        </div>
     </div>
+    <div class="row" style="display:flex;">
+        <div class="col-7">
+            <button class="button is-success form-control" id="btnScreenshot">
+                <span class="icon is-small">
+                    <i class="fas fa-camera"></i>
+                </span>
+            </button>
+
+        </div>
+        <div class="col-3">
+            <input type="file" id="selectedFile" style="display: none;" accept="image/*" />
+            <button type="button" onclick="document.getElementById('selectedFile').click();" class="form-control">
+                <span class="icon is-small">
+                    <i class="fas fa-images"></i>
+                </span>
+            </button>
+        </div>
+        <div class="col-2">
+            <button class="button" id="btnChangeCamera">
+                <span class="icon">
+                    <i class="fas fa-sync-alt"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <canvas class="is-hidden" id="canvas"></canvas>
 </div>
-
-<canvas class="is-hidden" id="canvas"></canvas>
-
 @section scripts{
     <script type="text/javascript">
         // get page elements
         const video = document.querySelector("#video");
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
         const btnPlay = document.querySelector("#btnPlay");
         const btnPause = document.querySelector("#btnPause");
         const btnScreenshot = document.querySelector("#btnScreenshot");
         const btnChangeCamera = document.querySelector("#btnChangeCamera");
         const screenshotsContainer = document.querySelector("#modal-body");
-        const modalFooter = document.querySelector("#modal-footer");
+        const modalFooterBtn = document.querySelector("#modal-footer-btn");
         const canvas = document.querySelector("#canvas");
         const devicesSelect = document.querySelector("#devicesSelect");
 
@@ -74,12 +111,12 @@
         const constraints = {
             video: {
                 width: {
-                    min: 1280,
+                    min: 320,
                     ideal: 1920,
                     max: 2560,
                 },
                 height: {
-                    min: 720,
+                    min: 300,
                     ideal: 1080,
                     max: 1440,
                 },
@@ -131,6 +168,14 @@
             screenshotsContainer.append(img);
         }
 
+        function createImageFromFile(src) {
+            const img = document.createElement("img");
+            img.classList.add("ScreenShot");
+            img.id = "ScreenShot_" + count;
+            img.src = src
+            screenshotsContainer.append(img);
+        }
+
         function createImageSendButton() {
             const btnSend = document.createElement("button");
             btnSend.classList.add("sendScreenShot");
@@ -139,7 +184,7 @@
             btnSend.id = "BtnSend_" + count;
             btnSend.textContent = "Envoyer";
             btnSend.setAttribute("type", "button");
-            modalFooter.append(btnSend);
+            modalFooterBtn.append(btnSend);
         }
 
         function createImageDeleteButton() {
@@ -150,7 +195,7 @@
             btnDelete.id = "BtnDelete_" + count;
             btnDelete.textContent = "Recommencer";
             btnDelete.setAttribute("type", "button");
-            modalFooter.append(btnDelete);
+            modalFooterBtn.append(btnDelete);
         }
 
         function PopulerSelectProjet() {
@@ -227,6 +272,31 @@
                 }
             }
 
+
+            //Fake screenShot
+            $("#selectedFile").on("change", function (evt) {
+                $(".deleteScreenShot").each(function (i, btn) {
+                    btn.click();
+                });
+
+                var tgt = evt.target || window.event.srcElement,
+                    files = tgt.files;
+
+                // FileReader support
+                if (FileReader && files && files.length) {
+                    var fr = new FileReader();
+                    fr.onload = function () {
+                        createImageFromFile(fr.result)
+                        createImageSendButton();
+                        createImageDeleteButton();
+                        $('#myModal').modal('show');
+                        count++;
+                    }
+                    fr.readAsDataURL(files[0]);
+                }
+
+            });
+
             // initialize
             async function initializeCamera() {
                 stopVideoStream();
@@ -265,19 +335,19 @@
             $(document).on("click", ".sendScreenShot", function (e) {
                 var imageNumber = $(this).attr('id').substr(8);
                 var currentImg = document.getElementById("ScreenShot_" + imageNumber);
-                $("#modal-body").append("<div class='spinner-border text-primary' role='status'><span class='sr-only'>Loading...</span></div>")
+                $("#modal-body").append("<div class='spinner-border text-primary' role='status' id='spinner'><span class='sr-only'>Loading...</span></div>")
                 $(".deleteScreenShot").prop('disabled', true);
                 $(".sendScreenShot").prop('disabled', true);
                 //Envoyer l'image
                 $.ajax({
                     cache: false,
                     contentType: "application/x-www-form-urlencoded",
-                    url: '/AST/EnvoyerAST',
+                    url: '/AST/EnvoyerPhoto',
                     type: 'POST',
                     dataType: "html",
                     data: "ASTPicture=" + currentImg.src + "&ProjetName=" + $("#SelectProjet option:selected").html(),
                     success: function (response) {
-                        if (response) {
+                        if (response == "True") {
                             $("#modal-body").append("<label id = 'ModalLabel' style='color: green;'>Votre AST a été envoyé avec succèes.</label>")
                             setTimeout(function () {
                                 document.getElementById("ModalLabel").parentNode.removeChild(document.getElementById("ModalLabel"));
@@ -285,6 +355,7 @@
                                 $(".deleteScreenShot").each(function (i, btn) {
                                     btn.click();
                                 });
+                                $('#spinner').remove()
                             }, 3000);
 
                         } else {
@@ -296,6 +367,7 @@
                                 $(".deleteScreenShot").each(function (i, btn) {
                                     btn.click();
                                 });
+                                $('#spinner').remove()
                             }, 3000);
                         }
                     },
@@ -307,6 +379,7 @@
                             $(".deleteScreenShot").each(function (i, btn) {
                                 btn.click();
                             });
+                            $('#spinner').remove()
                         }, 3000);
                     }
                 });

@@ -1,0 +1,210 @@
+﻿@model GestionChantier.Model.InformationUtilisateur
+@{
+    ViewBag.Title = "Location";
+}
+
+<script>
+    $(document).ready(function () {
+        $("#checkBoxLivraisonRapide").change(function () {
+            if (this.checked) {
+                $("#dateHeureLivraison").val(null);
+            }
+        });
+
+        $("#dateHeureLivraison").change(function () {
+            if ($("#dateHeureLivraison").val() != null) {
+                $("#checkBoxLivraisonRapide").prop('checked', false);
+            }
+
+        });
+    });
+</script>
+
+@if (Model.messageToShow != "")
+{
+    <script>
+        $(window).on('load', function () {
+            $('#responseModal').modal('show');
+        });
+    </script>
+    <div id="responseModal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Envoi de courriel</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>@Model.messageToShow</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-primary">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<h2 style="text-align:center">Formulaire de location Loutec</h2>
+
+<form action="/Loutec/EnvoyerFormulaireLocation" method="post">
+
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Commandé par : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="nom" type="text" placeholder="Prenom et Nom" class="form-control" required value="@Model.nom" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Téléphone : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="telephone" type="tel" placeholder="Téléphone" class="form-control" required value="@Model.telephone" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Courriel : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="courriel" type="email" placeholder="Courriel" class="form-control" required value="@Model.courriel" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Courriel directeur de projet: </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="courrielDirecteurProjet" type="email" placeholder="Courriel Directeur" class="form-control" value="@Model.courrielDirecteurProjet" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Adresse de livraison : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="adresseLivraison" value="" placeholder="Adresse civique" class="form-control" required />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Machines requises : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <textarea name="machines" rows="5" placeholder="Machines requises" class="form-control" required></textarea>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Date et heure de livraison souhaitée : </label>
+        </div>
+        <div class="col-lg-5 col-12">
+            <input name="dateHeureLivraison" type="datetime-local" class="form-control" id="dateHeureLivraison" />
+        </div>
+        <div class="col-lg-2 col-8">
+            <label class="form-check-label" for="checkBoxLivraisonRapide">Le plus tôt possible</label>
+        </div>
+        <div class="col-lg-1 col-4">
+            <input name="livraisonRapide" type="checkbox" value="true" class="form-control" id="checkBoxLivraisonRapide" />
+            <input name="livraisonRapide" type="hidden" value="false" class="form-control" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Livraison sur quai ou sol : </label>
+        </div>
+        <div class="form-check" style="display:flex" required>
+            <div class="col-lg-4 col-9">
+                <label>Quai&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            </div>
+            <div class="col-lg-1 col-3">
+                <input class="form-check-input" type="radio" name="SolOuQuai" id="boQuai" value="Quai" style="transform: scale(2);" />
+            </div>
+            <div class="col-lg-4 col-9">
+                <label>Sol</label>
+            </div>
+            <div class="col-lg-1 col-3">
+                <input class="form-check-input" type="radio" name="SolOuQuai" id="boSol" value="Sol" style="transform: scale(2);" checked />
+            </div>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Durée de location : </label>
+        </div>
+        <div class="col-2">
+            <input name="dureeLocationJour" type="number" min="0" step="1" value="0" class="form-control" required />
+        </div>
+        Jour(s)
+        <div class="col-2">
+            <input name="dureeLocationHeure" type="number" min="0" max="23" value="0" step="1" class="form-control" required />
+        </div>
+        Heure(s)
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>PO : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="po" type="text" class="form-control" required />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Commentaire : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <textarea name="commentaire" rows="5" placeholder="Commentaire" class="form-control"></textarea>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-6">
+            <a href="/Home/Index"><input value="Annuler" class="btn-danger form-control" style="text-align:center" /></a>
+        </div>
+        <div class="col-6">
+            <input type="submit" value="Envoyer" class="btn-success form-control" />
+        </div>
+    </div>
+
+</form>
+
+

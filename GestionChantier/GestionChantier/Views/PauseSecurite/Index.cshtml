@@ -1,0 +1,377 @@
+﻿@{
+    ViewBag.Title = "Photographier votre Pause securité";
+}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.2/css/bulma.min.css">
+<script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+
+
+<div type="hidden" class="photographerIdentifier" id="PauseSecurite"></div>
+<div class="container-fluid">
+    <div id="myModal" class="modal" tabindex="-1" role="dialog" data-backdrop="false">
+        <div class="vertical-alignment-helper">
+            <div class="modal-dialog vertical-align-center" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title"><b>Vérifier que votre Pause sécurité est lisible</b></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="modal-body" class="modal-body">
+
+                    </div>
+                    <div id="modal-footer" class="modal-footer">
+                        <select class="form-control" id="SelectProjet"></select>
+                    </div>
+                    @{ if (ViewBag.ASTAdmin)
+                        { Html.RenderPartial("_ASTAdmin"); }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row" style="display:inline;">
+        <div class="col-12">
+            <h1>
+                <a class="btn btn-primary" href="/Home/Index" role="button">Menu</a>
+                <b>Photographier votre AST</b>
+            </h1>
+            <video autoplay id="video" autoplay></video>
+            <!----><button class="button is-hidden" id="btnPlay">
+                <span class="icon is-small">
+                    <i class="fas fa-play"></i>
+                </span>
+            </button>
+            <button class="button is-hidden" id="btnPause">
+                <span class="icon is-small">
+                    <i class="fas fa-pause"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+    <div class="row" style="display:flex;">
+        <div class="col-7">
+            <button class="button is-success form-control" id="btnScreenshot">
+                <span class="icon is-small">
+                    <i class="fas fa-camera"></i>
+                </span>
+            </button>
+
+        </div>
+        <div class="col-3">
+            <input type="file" id="selectedFile" style="display: none;" accept="image/*" />
+            <button type="button" onclick="document.getElementById('selectedFile').click();" class="form-control">
+                <span class="icon is-small">
+                    <i class="fas fa-images"></i>
+                </span>
+            </button>
+        </div>
+        <div class="col-2">
+            <button class="button" id="btnChangeCamera">
+                <span class="icon">
+                    <i class="fas fa-sync-alt"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<canvas class="is-hidden" id="canvas"></canvas>
+
+@section scripts{
+    <script type="text/javascript">
+        // get page elements
+        const video = document.querySelector("#video");
+        video.setAttribute('autoplay', '');
+        video.setAttribute('muted', '');
+        video.setAttribute('playsinline', '');
+        const btnPlay = document.querySelector("#btnPlay");
+        const btnPause = document.querySelector("#btnPause");
+        const btnScreenshot = document.querySelector("#btnScreenshot");
+        const btnChangeCamera = document.querySelector("#btnChangeCamera");
+        const screenshotsContainer = document.querySelector("#modal-body");
+        const modalFooter = document.querySelector("#modal-footer");
+        const canvas = document.querySelector("#canvas");
+        const devicesSelect = document.querySelector("#devicesSelect");
+
+        // video constraints
+        const constraints = {
+            video: {
+                width: {
+                    min: 320,
+                    ideal: 1920,
+                    max: 2560,
+                },
+                height: {
+                    min: 300,
+                    ideal: 1080,
+                    max: 1440,
+                },
+            },
+        };
+
+        // use front face camera
+        let useFrontCamera = false;
+
+        // current video stream
+        let videoStream;
+        var count = 0;
+
+        // Cookies
+        function createCookie(name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            }
+            else var expires = "";
+
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            createCookie(name, "", -1);
+        }
+
+        function createImage() {
+            const img = document.createElement("img");
+            img.classList.add("ScreenShot");
+            img.id = "ScreenShot_" + count;
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext("2d").drawImage(video, 0, 0);
+            img.src = canvas.toDataURL("image/png");
+            screenshotsContainer.append(img);
+        }
+
+        function createImageFromFile(src) {
+            const img = document.createElement("img");
+            img.classList.add("ScreenShot");
+            img.id = "ScreenShot_" + count;
+            img.src = src
+            screenshotsContainer.append(img);
+        }
+
+        function createImageSendButton() {
+            const btnSend = document.createElement("button");
+            btnSend.classList.add("sendScreenShot");
+            btnSend.classList.add("btn");
+            btnSend.classList.add("btn-success");
+            btnSend.id = "BtnSend_" + count;
+            btnSend.textContent = "Envoyer";
+            btnSend.setAttribute("type", "button");
+            modalFooter.append(btnSend);
+        }
+
+        function createImageDeleteButton() {
+            const btnDelete = document.createElement("button");
+            btnDelete.classList.add("deleteScreenShot");
+            btnDelete.classList.add("btn");
+            btnDelete.classList.add("btn-danger");
+            btnDelete.id = "BtnDelete_" + count;
+            btnDelete.textContent = "Recommencer";
+            btnDelete.setAttribute("type", "button");
+            modalFooter.append(btnDelete);
+        }
+
+        function PopulerSelectProjet() {
+            $.ajax({
+                url: '/PauseSecurite/ObtenirProjets',
+                type: "POST",
+                success: function (response) {
+                    var SelectProjetId = readCookie("SelectProjetId");
+                    if (SelectProjetId == "")
+                        SelectProjetId = response["data"][0].NumeroProjet;
+
+                    response["data"].forEach(function (item, index) {
+                        var option = new Option(item.NumeroProjet, item.ID);
+
+                        if (option.value == SelectProjetId)
+                            option.selected = true;
+                        //<span style="z-index:1; margin-left:2.5em" class='badge badge-warning smallBadge' id='lblCategoriesCount'>Tous</span>
+                        $("#SelectProjet").append(option);
+                    });
+                },
+            })
+        }
+
+        (function () {
+            if (
+                !"mediaDevices" in navigator ||
+                !"getUserMedia" in navigator.mediaDevices
+            ) {
+                alert("Camera API is not available in your browser");
+                return;
+            }
+
+            // handle events
+            // play
+            btnPlay.addEventListener("click", function () {
+                video.play();
+                btnPlay.classList.add("is-hidden");
+                btnPause.classList.remove("is-hidden");
+            });
+
+            // pause
+            btnPause.addEventListener("click", function () {
+                video.pause();
+                btnPause.classList.add("is-hidden");
+                btnPlay.classList.remove("is-hidden");
+            });
+
+            // take screenshot
+            btnScreenshot.addEventListener("click", function () {
+                $(".deleteScreenShot").each(function (i, btn) {
+                    btn.click();
+                });
+
+                createImage();
+                createImageSendButton();
+                createImageDeleteButton();
+                $('#myModal').modal('show');
+                count++;
+            });
+
+            //Fake screenShot
+            $("#selectedFile").on("change", function (evt) {
+                $(".deleteScreenShot").each(function (i, btn) {
+                    btn.click();
+                });
+
+                var tgt = evt.target || window.event.srcElement,
+                    files = tgt.files;
+
+                // FileReader support
+                if (FileReader && files && files.length) {
+                    var fr = new FileReader();
+                    fr.onload = function () {
+                        createImageFromFile(fr.result)
+                        createImageSendButton();
+                        createImageDeleteButton();
+                        $('#myModal').modal('show');
+                        count++;
+                    }
+                    fr.readAsDataURL(files[0]);
+                }
+
+            });
+
+            // switch camera
+            btnChangeCamera.addEventListener("click", function () {
+                useFrontCamera = !useFrontCamera;
+
+                initializeCamera();
+            });
+
+            // stop video stream
+            function stopVideoStream() {
+                if (videoStream) {
+                    videoStream.getTracks().forEach((track) => {
+                        track.stop();
+                    });
+                }
+            }
+
+            // initialize
+            async function initializeCamera() {
+                stopVideoStream();
+                constraints.video.facingMode = useFrontCamera ? "user" : "environment";
+
+                try {
+                    videoStream = await navigator.mediaDevices.getUserMedia(constraints);
+                    video.srcObject = videoStream;
+                } catch (err) {
+                    alert("Could not access the camera");
+                }
+            }
+
+            initializeCamera();
+        })();
+
+        $(document).ready(function () {
+            PopulerSelectProjet();
+
+            $(document).on("change", "#SelectProjet", function () {
+                createCookie("SelectProjetId", $("#SelectProjet option:selected").val(), 360);
+            })
+
+            $(document).on("click", ".deleteScreenShot", function (e) {
+                var imageNumber = $(this).attr('id').substr(10);
+                var currentImg = document.getElementById("ScreenShot_" + imageNumber);
+                var currentEnvoyerBtn = document.getElementById("BtnSend_" + imageNumber);
+
+                //Delete les 3 trucs
+                currentImg.parentNode.removeChild(currentImg);
+                currentEnvoyerBtn.parentNode.removeChild(currentEnvoyerBtn);
+                this.parentNode.removeChild(this);
+                $('#myModal').modal('hide');
+            })
+
+            $(document).on("click", ".sendScreenShot", function (e) {
+                var imageNumber = $(this).attr('id').substr(8);
+                var currentImg = document.getElementById("ScreenShot_" + imageNumber);
+                $("#modal-body").append("<div class='spinner-border text-primary' role='status' id='spinner'><span class='sr-only'>Loading...</span></div>")
+                $(".deleteScreenShot").prop('disabled', true);
+                $(".sendScreenShot").prop('disabled', true);
+                //Envoyer l'image
+                $.ajax({
+                    cache: false,
+                    contentType: "application/x-www-form-urlencoded",
+                    url: '/PauseSecurite/EnvoyerPhoto',
+                    type: 'POST',
+                    dataType: "html",
+                    data: "ASTPicture=" + currentImg.src + "&ProjetName=" + $("#SelectProjet option:selected").html(),
+                    success: function (response) {
+                        if (response == "True") {
+                            $("#modal-body").append("<label id = 'ModalLabel' style='color: green;'>Votre Pause securité a été envoyé avec succèes.</label>")
+                            setTimeout(function () {
+                                document.getElementById("ModalLabel").parentNode.removeChild(document.getElementById("ModalLabel"));
+                                $(".deleteScreenShot").prop('disabled', false);
+                                $(".deleteScreenShot").each(function (i, btn) {
+                                    btn.click();
+                                });
+                                $('#spinner').remove()
+                            }, 3000);
+
+                        } else {
+
+                            $("#modal-body").append("<label id = 'ModalLabel' style='color: red;'>Il y a eu un erreur lors de lors de l'envoie de la Pause securité.</label>")
+                            setTimeout(function () {
+                                document.getElementById("ModalLabel").parentNode.removeChild(document.getElementById("ModalLabel"));
+                                $(".deleteScreenShot").prop('disabled', false);
+                                $(".deleteScreenShot").each(function (i, btn) {
+                                    btn.click();
+                                });
+                                $('#spinner').remove();
+                            }, 3000);
+                        }
+                    },
+                    error: function () {
+                        $("#modal-body").append("<label id = 'ModalLabel' style='color: red;'>Il y a eu un erreur lors de lors de l'envoie de la Pause sécurité.</label>")
+                        $(".deleteScreenShot").prop('disabled', false);
+                        setTimeout(function () {
+                            document.getElementById("ModalLabel").parentNode.removeChild(document.getElementById("ModalLabel"));
+                            $(".deleteScreenShot").each(function (i, btn) {
+                                btn.click();
+                            });
+                            $('#spinner').remove();
+                        }, 3000);
+                    }
+                });
+            })
+
+        });
+    </script>
+}

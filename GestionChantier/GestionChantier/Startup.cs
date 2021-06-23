@@ -18,7 +18,6 @@ namespace Net4MvcClient
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "Cookies",
-
             });
 
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
@@ -27,10 +26,10 @@ namespace Net4MvcClient
                 Authority = System.Configuration.ConfigurationManager.AppSettings["AuthentificateurUrl"],
                 RedirectUri = System.Configuration.ConfigurationManager.AppSettings["GestionChantierUrl"],
                 ResponseType = "id_token token",
-                RequireHttpsMetadata = false,
+                RequireHttpsMetadata = true,
                 ClientSecret = "secret3",
                 Scope = "openid profile",
-                UseTokenLifetime = false,
+                UseTokenLifetime = true,
                 TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
                 {
                     NameClaimType = "name",
@@ -39,5 +38,6 @@ namespace Net4MvcClient
                 SignInAsAuthenticationType = "Cookies",
             });
         }
+
     }
 }

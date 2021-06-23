@@ -1,0 +1,39 @@
+﻿@model IEnumerable<GestionChantier.Model.Livraison>
+
+@{
+    ViewBag.Title = "View";
+}
+<br>
+@Html.ActionLink("Nouvelle livraison", "Create", null, new { @class = "btn btn-success" })
+<h2>Commandes à envoyer</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.NomFichier)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.NomCompletUtilisateur)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.ActionLink(@item.NomFichier, "GetCommandePDF", new { path = item.Path })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NomCompletUtilisateur)
+            </td>
+            <td>
+                @if (!item.NomFichier.Contains("Complet"))
+                {
+                    @Html.ActionLink("Compléter", "Complete", new { path = item.Path })
+                }
+            </td>
+        </tr>
+    }
+
+</table>

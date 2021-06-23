@@ -4,6 +4,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GestionChantier", "GestionChantier\GestionChantier.csproj", "{D8F811C5-8D27-4E4C-8579-8659D60D826D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{32AF561D-5827-4C90-AAEE-4B5FB67490A4} = {32AF561D-5827-4C90-AAEE-4B5FB67490A4}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HorizonContext", "..\..\HorizonContext\HorizonContext.csproj", "{944532D3-66E9-42F4-9AB2-1E5DF794FABD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentManipulator", "..\..\DocumentManipulator\DocumentManipulator.csproj", "{32AF561D-5827-4C90-AAEE-4B5FB67490A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LivraisonsContext", "..\..\LivraisonsContext\LivraisonsContext.csproj", "{DAE14544-EFB6-42F6-A620-5B75FEA354DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PricerAbstractContext", "..\..\PricerAbstractContext\PricerAbstractContext\PricerAbstractContext.csproj", "{B228E8FF-FFBB-43B7-8B4E-657EC586D309}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -18,6 +29,30 @@ Global
 		{D8F811C5-8D27-4E4C-8579-8659D60D826D}.GestionChantierProd|Any CPU.Build.0 = Debug|Any CPU
 		{D8F811C5-8D27-4E4C-8579-8659D60D826D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D8F811C5-8D27-4E4C-8579-8659D60D826D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{944532D3-66E9-42F4-9AB2-1E5DF794FABD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{944532D3-66E9-42F4-9AB2-1E5DF794FABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{944532D3-66E9-42F4-9AB2-1E5DF794FABD}.GestionChantierProd|Any CPU.ActiveCfg = Debug|Any CPU
+		{944532D3-66E9-42F4-9AB2-1E5DF794FABD}.GestionChantierProd|Any CPU.Build.0 = Debug|Any CPU
+		{944532D3-66E9-42F4-9AB2-1E5DF794FABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{944532D3-66E9-42F4-9AB2-1E5DF794FABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32AF561D-5827-4C90-AAEE-4B5FB67490A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32AF561D-5827-4C90-AAEE-4B5FB67490A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32AF561D-5827-4C90-AAEE-4B5FB67490A4}.GestionChantierProd|Any CPU.ActiveCfg = Debug|Any CPU
+		{32AF561D-5827-4C90-AAEE-4B5FB67490A4}.GestionChantierProd|Any CPU.Build.0 = Debug|Any CPU
+		{32AF561D-5827-4C90-AAEE-4B5FB67490A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32AF561D-5827-4C90-AAEE-4B5FB67490A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAE14544-EFB6-42F6-A620-5B75FEA354DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAE14544-EFB6-42F6-A620-5B75FEA354DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAE14544-EFB6-42F6-A620-5B75FEA354DA}.GestionChantierProd|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAE14544-EFB6-42F6-A620-5B75FEA354DA}.GestionChantierProd|Any CPU.Build.0 = Debug|Any CPU
+		{DAE14544-EFB6-42F6-A620-5B75FEA354DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAE14544-EFB6-42F6-A620-5B75FEA354DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B228E8FF-FFBB-43B7-8B4E-657EC586D309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B228E8FF-FFBB-43B7-8B4E-657EC586D309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B228E8FF-FFBB-43B7-8B4E-657EC586D309}.GestionChantierProd|Any CPU.ActiveCfg = Debug|Any CPU
+		{B228E8FF-FFBB-43B7-8B4E-657EC586D309}.GestionChantierProd|Any CPU.Build.0 = Debug|Any CPU
+		{B228E8FF-FFBB-43B7-8B4E-657EC586D309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B228E8FF-FFBB-43B7-8B4E-657EC586D309}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

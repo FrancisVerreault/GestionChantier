@@ -1,0 +1,137 @@
+﻿@model GestionChantier.Model.LivraisonViewModel
+@{
+    ViewBag.Title = "Livraison";
+}
+
+<h2 style="text-align:center">Formulaire de livraison</h2>
+
+<form action="/Livraison/CreatePDF" method="post">
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Nom du demandeur : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="senderName" type="text" class="form-control" required value="@Model.senderName" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Courriel du demandeur : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="senderEmail" type="text" placeholder="Courriel bruneau uniquement" class="form-control" required value="@Model.senderEmail" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Téléphone du demandeur : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="senderPhone" type="text" class="form-control" required value="@Model.senderPhone" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Nom du receveur: </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="receiverName" type="text" class="form-control" required value="@Model.receiverName" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Courriel du receveur : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="receiverEmail" type="text" placeholder="Courriel bruneau uniquement" class="form-control" required value="@Model.receiverEmail" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Téléphone du receveur : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="receiverPhone" type="text" class="form-control" required value="@Model.receiverPhone" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Date de récupération : </label>
+        </div>
+        <div class="col-lg-5 col-12">
+            <input name="Date" type="datetime-local" class="form-control" required />
+        </div>
+    </div>
+
+    <br>
+
+    <h2>Objet(s) à livrer</h2>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Description de l'item / Commentaire, explication</label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <textarea name="description" class="form-control" required></textarea>
+        </div>
+    </div>
+
+    <br>
+
+    <h2>Ramassage</h2>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Lieu de ramassage : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="lieuRamassage" type="text" placeholder="(Entrepôt, case, soumission, bureau de..., CDE, WB, ETC...)" class="form-control" Required value="@Model.lieuRamassage" />
+        </div>
+    </div>
+
+    <br>
+
+    <h2>Livraison</h2>
+
+    <div class="row">
+        <div class="col-lg-2 col-12">
+            <label>Lieu de livraison : </label>
+        </div>
+        <div class="col-lg-10 col-12">
+            <input name="lieuLivraison" type="text" placeholder="Adresse du projet" class="form-control" required value="@Model.lieuLivraison" />
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-6">
+            <a href="@System.Configuration.ConfigurationManager.AppSettings["DashboardLivraisons"]"><input value="Annuler" class="btn-danger form-control" style="text-align:center" /></a>
+        </div>
+        <div class="col-6">
+            <input type="submit" value="Envoyer" class="btn-success form-control" />
+        </div>
+    </div>
+
+</form>
+
+
